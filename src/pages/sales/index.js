@@ -29,7 +29,7 @@ export default class Page {
     });
 
     const sortableTable = new SortableTable(header, {
-      url: `api/rest/orders?createdAt_gte=${from.toISOString()}&createdAt_lte=${to.toISOString()}&_start=1&_end=20`,
+      url: `api/rest/orders?createdAt_gte=${from.toISOString()}&createdAt_lte=${to.toISOString()}`,
       isSortLocally: true
     });
 

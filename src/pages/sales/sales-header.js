@@ -2,18 +2,20 @@ const header = [
   {
     id: 'id',
     title: 'ID',
-    sortable: false
+    sortable: true,
+    sortType: 'number'
   },
   {
     id: 'user',
     title: 'Клиент',
-    sortable: false
+    sortable: true,
+    sortType: 'string'
   },
   {
     id: 'createdAt',
     title: 'Дата',
     sortable: true,
-    sortType: 'number',
+    sortType: 'date',
     template: data => {
       return `
           <div class="sortable-table__cell">
@@ -29,7 +31,8 @@ const header = [
   {
     id: 'totalCost',
     title: 'Стоимость',
-    sortable: false,
+    sortable: true,
+    sortType: 'number',
     template: data => {
       return `
           <div class="sortable-table__cell">
@@ -41,7 +44,8 @@ const header = [
   {
     id: 'delivery',
     title: 'Статус',
-    sortable: false
+    sortable: true,
+    sortType: 'string'
   }
 ];
 

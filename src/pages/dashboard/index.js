@@ -63,7 +63,7 @@ export default class Page {
     });
 
     const sortableTable = new SortableTable(header, {
-      url: `api/dashboard/bestsellers?_start=1&_end=20&from=${from.toISOString()}&to=${to.toISOString()}`,
+      url: `api/dashboard/bestsellers?from=${from.toISOString()}&to=${to.toISOString()}`,
       isSortLocally: true
     });
 
