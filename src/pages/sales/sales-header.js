@@ -1,44 +1,47 @@
 const header = [
   {
-    id: 'images',
-    title: 'Image',
-    sortable: false,
+    id: 'id',
+    title: 'ID',
+    sortable: false
+  },
+  {
+    id: 'user',
+    title: 'Клиент',
+    sortable: false
+  },
+  {
+    id: 'createdAt',
+    title: 'Дата',
+    sortable: true,
+    sortType: 'number',
     template: data => {
       return `
           <div class="sortable-table__cell">
-            <img class="sortable-table-image" alt="Image" src="${data[0].url}">
+            ${new Date(data).toLocaleString('ru', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric'
+            })}
           </div>
         `;
     }
   },
   {
-    id: 'title',
-    title: 'Name',
-    sortable: true,
-    sortType: 'string'
-  },
-  {
-    id: 'quantity',
-    title: 'Quantity',
-    sortable: true,
-    sortType: 'number'
-  },
-  {
-    id: 'price',
-    title: 'Price',
-    sortable: true,
-    sortType: 'number'
-  },
-  {
-    id: 'status',
-    title: 'Status',
-    sortable: true,
-    sortType: 'number',
+    id: 'totalCost',
+    title: 'Стоимость',
+    sortable: false,
     template: data => {
-      return `<div class="sortable-table__cell">
-          ${data > 0 ? 'Active' : 'Inactive'}
-        </div>`;
+      return `
+          <div class="sortable-table__cell">
+            $${data}
+          </div>
+        `;
     }
+  },
+  {
+    id: 'delivery',
+    title: 'Статус',
+    sortable: false
   }
 ];
 

@@ -13,8 +13,9 @@ export default class Page {
     const data = await fetchJson(
       `${
         process.env.BACKEND_URL
-      }api/dashboard/bestsellers?_start=1&_end=20&from=${from.toISOString()}&to=${to.toISOString()}`
+      }api/rest/orders?_start=1&_end=20&createdAt_gte=${from.toISOString()}&createdAt_lte=${to.toISOString()}`
     );
+
     this.components.sortableTable.addRows(data);
   }
 
@@ -28,7 +29,7 @@ export default class Page {
     });
 
     const sortableTable = new SortableTable(header, {
-      url: `api/dashboard/bestsellers?_start=1&_end=20&from=${from.toISOString()}&to=${to.toISOString()}`,
+      url: `api/rest/orders?createdAt_gte=${from.toISOString()}&createdAt_lte=${to.toISOString()}&_start=1&_end=20`,
       isSortLocally: true
     });
 
@@ -44,7 +45,6 @@ export default class Page {
       </div>
 
       <div data-element="sortableTable">
-        <!-- sortable-table component -->
       </div>
     </div>`;
   }
