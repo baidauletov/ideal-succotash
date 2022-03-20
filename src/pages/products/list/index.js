@@ -8,16 +8,33 @@ export default class Page {
   element;
   subElements = {};
   components = {};
-  sliderMin = 1000;
+  sliderMin = 1;
   sliderMax = 4000;
+  titleSearch = '';
+  statusSearch = '';
 
-  async updateTableComponent(from, to) {
-    const data = await fetchJson(
-      `${
-        process.env.BACKEND_URL
-      }api/dashboard/bestsellers?_start=1&_end=20&from=${from.toISOString()}&to=${to.toISOString()}`
+  async updateTableComponent() {
+    const url = new URL(
+      'api/rest/products?_embed=subcategory.category&_start=1&_end=20',
+      process.env.BACKEND_URL
     );
-    this.components.sortableTable.addRows(data);
+
+    if (this.titleSearch) {
+      url.searchParams.set('title_like', this.titleSearch);
+    }
+    if (this.statusSearch) {
+      url.searchParams.set('status', this.statusSearch);
+    }
+    if (this.sliderMin) {
+      url.searchParams.set('price_gte', this.sliderMin);
+    }
+    if (this.sliderMax) {
+      url.searchParams.set('price_lte', this.sliderMax);
+    }
+
+    const data = await fetchJson(url);
+
+    this.components.sortableTable.update(data, true);
   }
 
   async initComponents() {
@@ -27,7 +44,7 @@ export default class Page {
     const sliderContainer = new DoubleSlider({ min: this.sliderMin, max: this.sliderMax });
 
     const sortableTable = new SortableTable(header, {
-      url: `api/dashboard/bestsellers?from=${from.toISOString()}&to=${to.toISOString()}`,
+      url: `/api/rest/products?_embed=subcategory.category`,
       isSortLocally: true
     });
 
@@ -62,8 +79,7 @@ export default class Page {
         </form>
       </div>
 
-      <div data-element="sortableTable">
-      </div>
+      <div data-element="sortableTable"></div>
     </div>`;
   }
 
@@ -102,7 +118,21 @@ export default class Page {
     }, {});
   }
 
-  initEventListeners() {}
+  initEventListeners() {
+    this.subElements.filterName.addEventListener('input', event => {
+      this.titleSearch = this.subElements.filterName.value;
+      this.updateTableComponent();
+    });
+    this.subElements.filterStatus.addEventListener('change', event => {
+      this.statusSearch = event.target.value;
+      this.updateTableComponent();
+    });
+    this.components.sliderContainer.element.addEventListener('range-select', event => {
+      this.sliderMin = event.detail.from;
+      this.sliderMax = event.detail.to;
+      this.updateTableComponent();
+    });
+  }
 
   destroy() {
     for (const component of Object.values(this.components)) {

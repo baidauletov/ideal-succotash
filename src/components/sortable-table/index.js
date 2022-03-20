@@ -20,7 +20,7 @@ export default class SortableTable {
       this.end = this.start + this.step;
 
       this.loading = true;
-      console.log(this.loading);
+
       const data = await this.loadData(id, order, this.start, this.end);
       this.update(data);
 
@@ -80,7 +80,6 @@ export default class SortableTable {
     this.step = step;
     this.start = start;
     this.end = end;
-    console.log('intial');
 
     this.render();
   }
@@ -123,13 +122,17 @@ export default class SortableTable {
     this.subElements.body.innerHTML = this.getTableRows(data);
   }
 
-  update(data) {
+  update(data, reload = false) {
     const rows = document.createElement('div');
 
-    this.data = [...this.data, ...data];
-    rows.innerHTML = this.getTableRows(data);
-
-    this.subElements.body.append(...rows.childNodes);
+    if (reload) {
+      this.data = [...data];
+      this.subElements.body.innerHTML = this.getTableRows(data);
+    } else {
+      this.data = [...this.data, ...data];
+      rows.innerHTML = this.getTableRows(data);
+      this.subElements.body.append(...rows.childNodes);
+    }
   }
 
   getTableHeader() {
@@ -170,9 +173,9 @@ export default class SortableTable {
     return data
       .map(
         item => `
-      <div class="sortable-table__row">
+      <a href="/products/${item.id}" class="sortable-table__row">
         ${this.getTableRow(item, data)}
-      </div>`
+      </a>`
       )
       .join('');
   }
