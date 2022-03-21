@@ -1,3 +1,5 @@
+import checkIcon from './check.svg';
+import errorIcon from './error.svg';
 export default class NotificationMessage {
   static stateNotification = null;
 
@@ -18,9 +20,12 @@ export default class NotificationMessage {
           <div class="notification-header">
           </div>
           <div class="notification-body">
+            <img src="${
+              this.type === 'success' ? checkIcon : errorIcon
+            }" class="notification__icon-suc">
             ${this.message}
-            ${this.setTimer()}
           </div>  
+          ${this.setTimer()}
         </div>
       </div>
     `;
@@ -54,7 +59,9 @@ export default class NotificationMessage {
   }
 
   remove() {
-    this.element.remove();
+    if (this.element) {
+      this.element.remove();
+    }
     clearTimeout(this.timer);
   }
 
