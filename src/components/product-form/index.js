@@ -22,7 +22,7 @@ export default class ProductForm {
   fileInput;
 
   constructor(productId) {
-    this.productId = productId;
+    this.productId = productId === 'add' ? '' : productId;
 
     this.render();
   }
@@ -184,12 +184,9 @@ export default class ProductForm {
     const fields = Object.keys(this.defaultFormData);
     const productData = this.productId ? data : this.defaultFormData;
 
+    console.log(this.productId);
     for (const key of fields) {
       let value = productData[key];
-
-      if (typeof value === 'string') {
-        value = value;
-      }
 
       this.subElements.productForm.querySelector(`#${key}`).value = value;
     }
