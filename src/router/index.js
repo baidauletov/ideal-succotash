@@ -2,6 +2,13 @@ import renderPage from './render-page.js';
 
 // performs routing on all links
 export default class Router {
+  static instance() {
+    if (!this._instance) {
+      this._instance = new Router();
+    }
+    return this._instance;
+  }
+
   constructor() {
     this.routes = [];
 
@@ -9,37 +16,32 @@ export default class Router {
   }
 
   initEventListeners() {
-    document.addEventListener('click', event => {
-      const link = event.target.closest('a');
-      if (!link) return;
-
-      const href = link.getAttribute('href');
-
-      if (href && href.startsWith('/')) {
-        event.preventDefault();
-        this.navigate(href);
-      }
-    });
+    document.addEventListener('click', this.onNavigateClick);
     document.addEventListener('click', this.onSidebarToggle);
   }
 
-  onSidebarToggle = event => {
-    const sidebarToggle = event.target.closest('.sidebar__toggler');
-    if (sidebarToggle) {
-      if (document.body.classList.contains('is-collapsed-sidebar')) {
-        document.body.className = '';
-      } else {
-        document.body.classList.add('is-collapsed-sidebar');
-      }
-    } else return;
+  onNavigateClick = event => {
+    const link = event.target.closest('a');
+    if (!link) return;
+
+    const href = link.getAttribute('href');
+
+    if (href && href.startsWith('/')) {
+      event.preventDefault();
+      this.navigate(href);
+    }
   };
 
-  static instance() {
-    if (!this._instance) {
-      this._instance = new Router();
+  onSidebarToggle = event => {
+    const sidebarToggle = event.target.closest('.sidebar__toggler');
+    if (!sidebarToggle) return;
+
+    if (document.body.classList.contains('is-collapsed-sidebar')) {
+      document.body.className = '';
+    } else {
+      document.body.classList.add('is-collapsed-sidebar');
     }
-    return this._instance;
-  }
+  };
 
   async route() {
     let strippedPath = decodeURI(window.location.pathname).replace(/^\/|\/$/, '');
